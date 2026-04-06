@@ -271,7 +271,7 @@
     <div class="question">
       <label class="q-label">What type of issues did you deal with? (Select all that apply)</label>
       <div class="option-group">
-        <label class="option"><input type="checkbox" name="issue_types" value="AC / HVAC"> AC / HVAC</label>
+        <label class="option"><input type="checkbox" name="issue_types" value="AC/HVAC"> AC / HVAC</label>
         <label class="option"><input type="checkbox" name="issue_types" value="Plumbing"> Plumbing</label>
         <label class="option"><input type="checkbox" name="issue_types" value="Electrical"> Electrical</label>
         <label class="option"><input type="checkbox" name="issue_types" value="General repairs"> General repairs / carpentry</label>
@@ -501,6 +501,9 @@ document.getElementById('surveyForm').addEventListener('submit', async function(
   btn.disabled = true;
   try {
     const data = new FormData(this);
+    const issueVals = data.getAll('issue_types').join(', ');
+    while (data.has('issue_types')) data.delete('issue_types');
+    data.append('issue_types', issueVals);
     const response = await fetch(this.action, {
       method: 'POST', body: data,
       headers: { 'Accept': 'application/json' }
