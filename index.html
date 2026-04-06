@@ -215,7 +215,7 @@
 
 <div class="header">
   <h1>🏠 Home Maintenance Service — Your Feedback</h1>
-  <p>We're testing a monthly home maintenance service designed to catch problems before they become expensive repairs. Your honest feedback takes 3 minutes and shapes what we build.</p>
+  <p>We're testing a monthly home maintenance service designed to catch problems before they become expensive repairs. Your honest feedback takes under 2 minutes and shapes what we build.</p>
 </div>
 
 <div class="notice-bar">
@@ -236,8 +236,9 @@
         <label class="option"><input type="radio" name="home_type" value="3-bedroom apartment"> 3-bedroom apartment</label>
         <label class="option"><input type="radio" name="home_type" value="4+ bedroom apartment"> 4+ bedroom apartment</label>
         <label class="option"><input type="radio" name="home_type" value="Villa"> Villa</label>
-        <label class="option"><input type="radio" name="home_type" value="Other"> Other</label>
+        <label class="option"><input type="radio" name="home_type" value="Other" id="home_type_other_radio"> Other</label>
       </div>
+      <input type="text" id="home_type_other_text" name="home_type_other" placeholder="Please describe your home type..." style="display:none; margin-top:8px;">
     </div>
 
     <div class="question">
@@ -276,8 +277,9 @@
         <label class="option"><input type="checkbox" name="issue_types" value="Electrical"> Electrical</label>
         <label class="option"><input type="checkbox" name="issue_types" value="General repairs"> General repairs / carpentry</label>
         <label class="option"><input type="checkbox" name="issue_types" value="Painting"> Painting</label>
-        <label class="option"><input type="checkbox" name="issue_types" value="Other"> Other</label>
+        <label class="option"><input type="checkbox" name="issue_types" value="Other" id="issue_other_check"> Other</label>
       </div>
+      <input type="text" id="issue_other_text" name="issue_types_other" placeholder="Please describe the issue..." style="display:none; margin-top:8px;">
     </div>
 
     <div class="question">
@@ -404,28 +406,6 @@
     </div>
 
     <div class="question">
-      <label class="q-label">Price sensitivity — what feels right to you? <span class="req">*</span></label>
-      <p style="font-size:12px; color:#777; margin-bottom:12px;">Enter the monthly SAR amount for each. Leave blank if unsure.</p>
-      <div class="vw-grid">
-        <div class="vw-item">
-          <label>Too cheap</label>
-          <div class="desc" style="font-size:11px; color:#888;">Makes you question quality</div>
-          <div class="sar-prefix"><input type="number" name="price_too_cheap" placeholder="100" min="0" max="9999"></div>
-        </div>
-        <div class="vw-item">
-          <label>Fair price</label>
-          <div class="desc" style="font-size:11px; color:#888;">Good value for what you get</div>
-          <div class="sar-prefix"><input type="number" name="price_fair" placeholder="150" min="0" max="9999" required></div>
-        </div>
-        <div class="vw-item">
-          <label>Too expensive</label>
-          <div class="desc" style="font-size:11px; color:#888;">Would make you hesitate</div>
-          <div class="sar-prefix"><input type="number" name="price_too_expensive" placeholder="300" min="0" max="9999"></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="question">
       <label class="q-label">What would make this service a must-have for your household? <span class="opt">(optional)</span></label>
       <textarea name="must_have_factors" placeholder="e.g. trustworthy technicians, guaranteed response time, WhatsApp booking, fixed price with no surprises..."></textarea>
     </div>
@@ -490,6 +470,20 @@ function setSubscribe(val, el) {
   document.getElementById('would_subscribe').value = val;
 }
 
+// Show/hide "Other" text inputs
+document.querySelectorAll('input[name="home_type"]').forEach(function(r) {
+  r.addEventListener('change', function() {
+    var t = document.getElementById('home_type_other_text');
+    t.style.display = this.value === 'Other' ? 'block' : 'none';
+    if (this.value !== 'Other') t.value = '';
+  });
+});
+document.getElementById('issue_other_check').addEventListener('change', function() {
+  var t = document.getElementById('issue_other_text');
+  t.style.display = this.checked ? 'block' : 'none';
+  if (!this.checked) t.value = '';
+});
+
 document.getElementById('surveyForm').addEventListener('submit', async function(e) {
   e.preventDefault();
   if (!document.getElementById('would_subscribe').value) {
@@ -501,9 +495,18 @@ document.getElementById('surveyForm').addEventListener('submit', async function(
   btn.disabled = true;
   try {
     const data = new FormData(this);
-    const issueVals = data.getAll('issue_types').join(', ');
+    // Merge "Other" home type free text
+    if (data.get('home_type') === 'Other' && data.get('home_type_other')) {
+      data.set('home_type', 'Other: ' + data.get('home_type_other'));
+    }
+    data.delete('home_type_other');
+    // Merge issue types; append "Other" free text if filled
+    let issueVals = data.getAll('issue_types');
+    const issueOther = (data.get('issue_types_other') || '').trim();
     while (data.has('issue_types')) data.delete('issue_types');
-    data.append('issue_types', issueVals);
+    data.delete('issue_types_other');
+    if (issueOther) issueVals = issueVals.map(v => v === 'Other' ? 'Other: ' + issueOther : v);
+    data.append('issue_types', issueVals.join(', '));
     const response = await fetch(this.action, {
       method: 'POST', body: data,
       headers: { 'Accept': 'application/json' }
