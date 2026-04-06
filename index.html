@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Home Services & Maintenance Survey</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: #f5f5f5;
+    color: #333;
+    line-height: 1.6;
+  }
+  .header {
+    background: linear-gradient(135deg, #1a73e8, #0d47a1);
+    color: white;
+    padding: 40px 24px 32px;
+    text-align: center;
+  }
+  .header h1 { font-size: 24px; font-weight: 600; margin-bottom: 12px; }
+  .header p { font-size: 15px; opacity: 0.9; max-width: 520px; margin: 0 auto; }
+  .form-wrapper {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 24px 16px 60px;
+  }
+  .section-card {
+    background: white;
+    border-radius: 8px;
+    padding: 24px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+  }
+  .section-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1a73e8;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e8f0fe;
+  }
+  .question {
+    margin-bottom: 24px;
+  }
+  .question:last-child { margin-bottom: 0; }
+  .question label {
+    display: block;
+    font-size: 15px;
+    font-weight: 500;
+    margin-bottom: 10px;
+    color: #202124;
+  }
+  .question label .required { color: #d93025; margin-left: 3px; }
+  .option-group { display: flex; flex-direction: column; gap: 8px; }
+  .option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border: 1px solid #dadce0;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-size: 14px;
+  }
+  .option:hover { background: #f8f9ff; border-color: #1a73e8; }
+  .option input[type="radio"],
+  .option input[type="checkbox"] {
+    width: 18px; height: 18px;
+    accent-color: #1a73e8;
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  textarea {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid #dadce0;
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: inherit;
+    color: #202124;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  input[type="text"]:focus,
+  input[type="email"]:focus,
+  input[type="tel"]:focus,
+  textarea:focus {
+    border-color: #1a73e8;
+    box-shadow: 0 0 0 2px rgba(26,115,232,0.15);
+  }
+  .grid-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin-top: 6px;
+  }
+  .grid-table th {
+    padding: 8px 6px;
+    text-align: center;
+    color: #555;
+    font-weight: 500;
+    background: #f8f9ff;
+  }
+  .grid-table td {
+    padding: 8px 6px;
+    text-align: center;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  .grid-table tr:last-child td { border-bottom: none; }
+  .grid-table td:first-child { text-align: left; padding-left: 4px; font-size: 14px; }
+  .grid-table input[type="radio"] {
+    width: 16px; height: 16px;
+    accent-color: #1a73e8;
+    cursor: pointer;
+  }
+  .submit-btn {
+    background: #1a73e8;
+    color: white;
+    border: none;
+    padding: 14px 40px;
+    font-size: 16px;
+    font-weight: 500;
+    border-radius: 6px;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 8px;
+    transition: background 0.2s;
+  }
+  .submit-btn:hover { background: #1557b0; }
+  .submit-btn:active { background: #0d47a1; }
+  .optional-note { font-size: 12px; color: #777; margin-left: 4px; font-weight: 400; }
+  .progress-bar {
+    background: white;
+    padding: 12px 24px;
+    border-bottom: 1px solid #e0e0e0;
+    font-size: 13px;
+    color: #555;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+  .progress-track {
+    flex: 1;
+    height: 4px;
+    background: #e0e0e0;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: #1a73e8;
+    border-radius: 2px;
+    width: 0%;
+    transition: width 0.3s;
+  }
+  .success-screen {
+    display: none;
+    text-align: center;
+    padding: 60px 24px;
+  }
+  .success-screen .icon { font-size: 64px; margin-bottom: 20px; }
+  .success-screen h2 { font-size: 24px; color: #1a73e8; margin-bottom: 12px; }
+  .success-screen p { color: #555; font-size: 15px; }
+  @media (max-width: 480px) {
+    .header h1 { font-size: 20px; }
+    .section-card { padding: 18px; }
+    .grid-table { font-size: 12px; }
+    .grid-table th, .grid-table td { padding: 6px 3px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🏠 Home Services & Maintenance Survey</h1>
+  <p>We want to understand what families need most for home service and maintenance. Your answers will help us plan better services and set fair pricing. Takes 3–5 minutes.</p>
+</div>
+
+<div style="background:#f5f5f5; padding: 8px 16px; text-align:center; font-size: 13px; color: #555; border-bottom: 1px solid #e0e0e0;">
+  All responses are confidential · Takes 3–5 minutes
+</div>
+
+<div class="form-wrapper">
+<form id="surveyForm" action="https://formspree.io/f/xrbpbzop" method="POST">
+
+  <!-- SECTION 1: Household Info -->
+  <div class="section-card">
+    <div class="section-title">Section 1: Household Info</div>
+
+    <div class="question">
+      <label>1. What type of home do you live in? <span class="required">*</span></label>
+      <div class="option-group">
+        <label class="option"><input type="radio" name="home_type" value="Apartment" required> Apartment</label>
+        <label class="option"><input type="radio" name="home_type" value="Villa"> Villa</label>
+        <label class="option"><input type="radio" name="home_type" value="Townhouse"> Townhouse</label>
+        <label class="option"><input type="radio" name="home_type" value="Other"> Other</label>
+      </div>
+    </div>
+
+    <div class="question">
+      <label>2. How many people live in your household? <span class="required">*</span></label>
+      <div class="option-group">
+        <label class="option"><input type="radio" name="household_size" value="1-2" required> 1–2</label>
+        <label class="option"><input type="radio" name="household_size" value="3-4"> 3–4</label>
+        <label class="option"><input type="radio" name="household_size" value="5-6"> 5–6</label>
+        <label class="option"><input type="radio" name="household_size" value="7+"> 7+</label>
+      </div>
+    </div>
+
+    <div class="question">
+      <label>3. Do you own or rent your home? <span class="required">*</span></label>
+      <div class="option-group">
+        <label class="option"><input type="radio" name="ownership" value="Own" required> Own</label>
+        <label class="option"><input type="radio" name="ownership" value="Rent"> Rent</label>
+      </div>
+    </div>
+
+    <div class="question">
+      <label>4. Which city do you live in? <span class="required">*</span></label>
+      <input type="text" name="city" placeholder="e.g. Riyadh, Jeddah, Dammam..." required>
+    </div>
+  </div>
+
+  <!-- SECTION 2: Services Needed -->
+  <div class="section-card">
+    <div class="section-title">Section 2: Services You've Needed</div>
+
+    <div class="question">
+      <label>5. Which home services have you needed in the last 12 months? <span class="required">*</span> (Select all that apply)</label>
+      <div class="option-group">
+        <label class="option"><input type="checkbox" name="services_needed" value="Plumbing"> Plumbing</label>
+        <label class="option"><input type="checkbox" name="services_needed" value="Electrical"> Electrical</label>
+        <label class="option"><input type="checkbox" name="services_needed" value="HVAC / Air conditioning"> HVAC / Air conditioning</label>
+        <label class="option"><input type="checkbox" name="services_needed" value="Painting"> Painting</label>
+        <label class="option"><input type="checkbox" name="services_needed" value="General repairs / carpentry"> General repairs / carpentry</label>
+        <label class="option"><input type="checkbox" name="services_needed" value="Pest control"> Pest control</label>
+        <label class="option"><input type="checkbox" name="services_needed" value="Cleaning / deep cleaning"> Cleaning / deep cleaning</label>
+        <label class="option"><input type="checkbox" name="services_needed" value="Appliance repair"> Appliance repair</label>
+        <label class="option"><input type="checkbox" name="services_needed" value="Other"> Other</label>
+      </div>
+    </div>
+
+    <div class="question">
+      <label>6. How many times did you need a home service professional in the last 12 months? <span class="required">*</span></label>
+      <div class="option-group">
+        <label class="option"><input type="radio" name="service_frequency" value="1-2 times" required> 1–2 times</label>
+        <label class="option"><input type="radio" name="service_frequency" value="3-5 times"> 3–5 times</label>
+        <label class="option"><input type="radio" name="service_frequency" value="6-10 times"> 6–10 times</label>
+        <label class="option"><input type="radio" name="service_frequency" value="More than 10 times"> More than 10 times</label>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 3: Reason for Service -->
+  <div class="section-card">
+    <div class="section-title">Section 3: Reason for Service</div>
+
+    <div class="question">
+      <label>7. What triggered your last service request? <span class="required">*</span></label>
+      <div class="option-group">
+        <label class="option"><input type="radio" name="trigger" value="Something broke unexpectedly" required> Something broke unexpectedly</label>
+        <label class="option"><input type="radio" name="trigger" value="Routine/preventive maintenance"> Routine / preventive maintenance</label>
+        <label class="option"><input type="radio" name="trigger" value="Moving in or out"> Moving in or out</label>
+        <label class="option"><input type="radio" name="trigger" value="Renovation or upgrade"> Renovation or upgrade</label>
+        <label class="option"><input type="radio" name="trigger" value="Seasonal maintenance (AC, etc.)"> Seasonal maintenance (AC service, etc.)</label>
+        <label class="option"><input type="radio" name="trigger" value="Other"> Other</label>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 4: Urgency & Priority -->
+  <div class="section-card">
+    <div class="section-title">Section 4: Urgency & Priority</div>
+
+    <div class="question">
+      <label>8. When something breaks at home, how quickly do you need it fixed? <span class="required">*</span></label>
+      <div class="option-group">
+        <label class="option"><input type="radio" name="urgency" value="Same day (emergency)" required> Same day (emergency)</label>
+        <label class="option"><input type="radio" name="urgency" value="Within 24 hours"> Within 24 hours</label>
+        <label class="option"><input type="radio" name="urgency" value="Within 2-3 days"> Within 2–3 days</label>
+        <label class="option"><input type="radio" name="urgency" value="Within a week"> Within a week</label>
+        <label class="option"><input type="radio" name="urgency" value="No urgency"> No urgency</label>
+      </div>
+    </div>
+
+    <div class="question">
+      <label>9. Rank the following services by priority to you <span class="required">*</span><br><small style="font-weight:400; color:#777;">Select 1 (highest) to 5 (lowest) for each service</small></label>
+      <div style="overflow-x:auto; margin-top:8px;">
+        <table class="grid-table">
+          <thead>
+            <tr>
+              <th style="text-align:left; width:38%">Service</th>
+              <th>1<br><small>Highest</small></th>
+              <th>2</th>
+              <th>3</th>
+              <th>4</th>
+              <th>5<br><small>Lowest</small></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Plumbing</td>
+              <td><input type="radio" name="priority_plumbing" value="1"></td>
+              <td><input type="radio" name="priority_plumbing" value="2"></td>
+              <td><input type="radio" name="priority_plumbing" value="3"></td>
+              <td><input type="radio" name="priority_plumbing" value="4"></td>
+              <td><input type="radio" name="priority_plumbing" value="5"></td>
+            </tr>
+            <tr>
+              <td>Electrical</td>
+              <td><input type="radio" name="priority_electrical" value="1"></td>
+              <td><input type="radio" name="priority_electrical" value="2"></td>
+              <td><input type="radio" name="priority_electrical" value="3"></td>
+              <td><input type="radio" name="priority_electrical" value="4"></td>
+              <td><input type="radio" name="priority_electrical" value="5"></td>
+            </tr>
+            <tr>
+              <td>HVAC / AC</td>
+              <td><input type="radio" name="priority_hvac" value="1"></td>
+              <td><input type="radio" name="priority_hvac" value="2"></td>
+              <td><input type="radio" name="priority_hvac" value="3"></td>
+              <td><input type="radio" name="priority_hvac" value="4"></td>
+              <td><input type="radio" name="priority_hvac" value="5"></td>
+            </tr>
+            <tr>
+              <td>Painting</td>
+              <td><input type="radio" name="priority_painting" value="1"></td>
+              <td><input type="radio" name="priority_painting" value="2"></td>
+              <td><input type="radio" name="priority_painting" value="3"></td>
+              <td><input type="radio" name="priority_painting" value="4"></td>
+              <td><input type="radio" name="priority_painting" value="5"></td>
+            </tr>
+            <tr>
+              <td>General repairs</td>
+              <td><input type="radio" name="priority_repairs" value="1"></td>
+              <td><input type="radio" name="priority_repairs" value="2"></td>
+              <td><input type="radio" name="priority_repairs" value="3"></td>
+              <td><input type="radio" name="priority_repairs" value="4"></td>
+              <td><input type="radio" name="priority_repairs" value="5"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 5: Service Program -->
+  <div class="section-card">
+    <div class="section-title">Section 5: Service & Maintenance Program</div>
+
+    <div class="question">
+      <label>10. Would you be interested in a monthly home maintenance subscription — where a professional visits your home twice a month (once for preventive checks, once for any repairs needed)? <span class="required">*</span></label>
+      <div class="option-group">
+        <label class="option"><input type="radio" name="subscription_interest" value="Yes, definitely" required> Yes, definitely</label>
+        <label class="option"><input type="radio" name="subscription_interest" value="Yes, possibly"> Yes, possibly</label>
+        <label class="option"><input type="radio" name="subscription_interest" value="Not sure"> Not sure</label>
+        <label class="option"><input type="radio" name="subscription_interest" value="No"> No</label>
+      </div>
+    </div>
+
+    <div class="question">
+      <label>11. What would make you more likely to subscribe? (Select all that apply)</label>
+      <div class="option-group">
+        <label class="option"><input type="checkbox" name="subscription_drivers" value="Fixed monthly price (no surprise costs)"> Fixed monthly price (no surprise costs)</label>
+        <label class="option"><input type="checkbox" name="subscription_drivers" value="Guaranteed response time"> Guaranteed response time</label>
+        <label class="option"><input type="checkbox" name="subscription_drivers" value="Trusted, vetted technicians"> Trusted, vetted technicians</label>
+        <label class="option"><input type="checkbox" name="subscription_drivers" value="Digital tracking of service history"> Digital tracking of service history</label>
+        <label class="option"><input type="checkbox" name="subscription_drivers" value="Family/household plan discounts"> Family/household plan discounts</label>
+        <label class="option"><input type="checkbox" name="subscription_drivers" value="Easy booking via app or WhatsApp"> Easy booking via app or WhatsApp</label>
+        <label class="option"><input type="checkbox" name="subscription_drivers" value="Other"> Other</label>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 6: Pricing -->
+  <div class="section-card">
+    <div class="section-title">Section 6: Pricing</div>
+
+    <div class="question">
+      <label>12. What would you expect to pay per month for a home maintenance subscription (2 visits/month, all services included)? <span class="required">*</span></label>
+      <div class="option-group">
+        <label class="option"><input type="radio" name="wtp" value="Less than SAR 100" required> Less than SAR 100</label>
+        <label class="option"><input type="radio" name="wtp" value="SAR 100–150"> SAR 100–150</label>
+        <label class="option"><input type="radio" name="wtp" value="SAR 150–250"> SAR 150–250</label>
+        <label class="option"><input type="radio" name="wtp" value="SAR 250–400"> SAR 250–400</label>
+        <label class="option"><input type="radio" name="wtp" value="More than SAR 400"> More than SAR 400</label>
+        <label class="option"><input type="radio" name="wtp" value="I wouldn't pay for a subscription"> I wouldn't pay for a subscription</label>
+      </div>
+    </div>
+
+    <div class="question">
+      <label>13. How do you currently find home service professionals? (Select all that apply)</label>
+      <div class="option-group">
+        <label class="option"><input type="checkbox" name="find_method" value="Personal referrals (friends/family)"> Personal referrals (friends/family)</label>
+        <label class="option"><input type="checkbox" name="find_method" value="Online platforms (e.g. Justmop, UrbanClap)"> Online platforms (e.g. Justmop, UrbanClap)</label>
+        <label class="option"><input type="checkbox" name="find_method" value="Building management"> Building management</label>
+        <label class="option"><input type="checkbox" name="find_method" value="Direct contractor contact"> Direct contractor contact</label>
+        <label class="option"><input type="checkbox" name="find_method" value="Social media"> Social media</label>
+        <label class="option"><input type="checkbox" name="find_method" value="Other"> Other</label>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 7: Contact Info -->
+  <div class="section-card">
+    <div class="section-title">Section 7: Stay in Touch <span class="optional-note">(optional)</span></div>
+    <p style="font-size:13px; color:#666; margin-bottom:20px;">If you'd like to hear about our program when it launches, leave your details below. Not required.</p>
+
+    <div class="question">
+      <label>14. Name <span class="optional-note">(optional)</span></label>
+      <input type="text" name="contact_name" placeholder="Your name">
+    </div>
+
+    <div class="question">
+      <label>15. Phone number or WhatsApp <span class="optional-note">(optional)</span></label>
+      <input type="tel" name="contact_phone" placeholder="+966 5X XXX XXXX">
+    </div>
+
+    <div class="question">
+      <label>16. Email address <span class="optional-note">(optional)</span></label>
+      <input type="email" name="contact_email" placeholder="your@email.com">
+    </div>
+
+    <div class="question">
+      <label>17. Preferred way to be contacted</label>
+      <div class="option-group">
+        <label class="option"><input type="radio" name="contact_pref" value="WhatsApp"> WhatsApp</label>
+        <label class="option"><input type="radio" name="contact_pref" value="Phone call"> Phone call</label>
+        <label class="option"><input type="radio" name="contact_pref" value="Email"> Email</label>
+        <label class="option"><input type="radio" name="contact_pref" value="I prefer not to be contacted"> I prefer not to be contacted</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-card" style="text-align:center; background: #f8f9ff; border: 1px solid #e8f0fe;">
+    <p style="font-size:14px; color:#555; margin-bottom:16px;">Thank you for taking the time to complete this survey. Your feedback helps us build a better service.</p>
+    <button type="submit" class="submit-btn">Submit Survey →</button>
+  </div>
+
+</form>
+
+<div class="success-screen" id="successScreen">
+  <div class="icon">✅</div>
+  <h2>Thank you!</h2>
+  <p>Your response has been recorded.<br>We appreciate your time and will be in touch if you left your details.</p>
+</div>
+
+</div><!-- end form-wrapper -->
+
+<script>
+document.getElementById('surveyForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const btn = this.querySelector('.submit-btn');
+  btn.textContent = 'Submitting...';
+  btn.disabled = true;
+
+  try {
+    const data = new FormData(this);
+    const response = await fetch(this.action, {
+      method: 'POST',
+      body: data,
+      headers: { 'Accept': 'application/json' }
+    });
+    if (response.ok) {
+      this.style.display = 'none';
+      document.getElementById('successScreen').style.display = 'block';
+      window.scrollTo(0, 0);
+    } else {
+      btn.textContent = 'Submit Survey →';
+      btn.disabled = false;
+      alert('There was an issue submitting. Please try again.');
+    }
+  } catch (err) {
+    btn.textContent = 'Submit Survey →';
+    btn.disabled = false;
+    alert('Network error. Please check your connection and try again.');
+  }
+});
+</script>
+
+</body>
+</html>
